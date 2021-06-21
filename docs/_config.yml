@@ -30,7 +30,7 @@ twitter_username: nkhanhtrn
 github_username:  nkhanhtrn
 
 # Build settings
-theme: jekyll-theme-hacker
+theme: jekyll-theme-cayman
 plugins:
   - jekyll-feed
 
