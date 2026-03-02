@@ -9,7 +9,7 @@
 
     <transition name="fade">
       <div v-if="showFull" class="qr-wrapper">
-        <canvas ref="canvasRef"></canvas>
+        <img :src="qrUrl" alt="QR Code" class="qr-img">
         <p class="qr-url">{{ shortUrl }}</p>
         <button class="copy-btn" @click="copyUrl">
           {{ copied ? 'Copied!' : 'Copy Link' }}
@@ -20,8 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, nextTick } from 'vue'
-import QRCode from 'qrcode'
+import { ref, computed } from 'vue'
 
 interface Props {
   url: string
@@ -30,40 +29,22 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const canvasRef = ref<HTMLCanvasElement>()
 const showFull = ref(false)
 const copied = ref(false)
 
-const shortUrl = ref('')
-
-// Shorten URL for display
-function shortenUrl(url: string): string {
+const shortUrl = computed(() => {
   try {
-    const urlObj = new URL(url)
+    const urlObj = new URL(props.url)
     return `${urlObj.hostname}${urlObj.pathname}`
   } catch {
-    return url
+    return props.url
   }
-}
+})
 
-shortUrl.value = shortenUrl(props.url)
-
-async function generateQR() {
-  if (!canvasRef.value) return
-
-  try {
-    await QRCode.toCanvas(canvasRef.value, props.url, {
-      width: 200,
-      margin: 2,
-      color: {
-        dark: '#1a1a1a',
-        light: '#ffffff'
-      }
-    })
-  } catch (error) {
-    console.error('Failed to generate QR code:', error)
-  }
-}
+// Use QR Server API - no library needed
+const qrUrl = computed(() => {
+  return `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(props.url)}`
+})
 
 async function copyUrl() {
   try {
@@ -72,23 +53,20 @@ async function copyUrl() {
     setTimeout(() => {
       copied.value = false
     }, 2000)
-  } catch (error) {
-    console.error('Failed to copy URL:', error)
+  } catch {
+    // Fallback for older browsers
+    const textArea = document.createElement('textarea')
+    textArea.value = props.url
+    document.body.appendChild(textArea)
+    textArea.select()
+    document.execCommand('copy')
+    document.body.removeChild(textArea)
+    copied.value = true
+    setTimeout(() => {
+      copied.value = false
+    }, 2000)
   }
 }
-
-onMounted(() => {
-  generateQR()
-})
-
-watch(() => props.url, () => {
-  shortUrl.value = shortenUrl(props.url)
-  if (showFull.value) {
-    nextTick(() => {
-      generateQR()
-    })
-  }
-})
 </script>
 
 <style scoped>
@@ -120,12 +98,10 @@ watch(() => props.url, () => {
   font-size: 0.75rem;
   color: #616161;
   cursor: pointer;
-  transition: all 0.2s;
 }
 
 .close-btn:hover {
   background: #f0f0f0;
-  border-color: #bdbdbd;
 }
 
 .qr-wrapper {
@@ -138,7 +114,9 @@ watch(() => props.url, () => {
   border-radius: 8px;
 }
 
-.qr-wrapper canvas {
+.qr-img {
+  width: 200px;
+  height: 200px;
   border-radius: 8px;
 }
 
@@ -157,9 +135,7 @@ watch(() => props.url, () => {
   border: none;
   border-radius: 6px;
   font-size: 0.875rem;
-  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
 }
 
 .copy-btn:hover {
