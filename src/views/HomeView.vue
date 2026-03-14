@@ -10,6 +10,12 @@
           <h1>App Store</h1>
         </div>
         <div class="header-actions">
+          <a href="https://nkhanhtrn.github.io/trading-journal/" class="journal-btn" target="_blank" rel="noopener" title="Trading Journal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+          </a>
           <button class="refresh-btn" @click="refresh" :disabled="loading">
             <svg :class="{ spin: loading }" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M23 4v6h-6M1 20v-6h6"/>
@@ -195,7 +201,8 @@ onMounted(() => {
 }
 
 .refresh-btn,
-.settings-btn {
+.settings-btn,
+.journal-btn {
   width: 40px;
   height: 40px;
   border: none;
@@ -207,10 +214,12 @@ onMounted(() => {
   justify-content: center;
   transition: all 0.2s;
   color: #616161;
+  text-decoration: none;
 }
 
 .refresh-btn:hover:not(:disabled),
-.settings-btn:hover {
+.settings-btn:hover,
+.journal-btn:hover {
   background: #e8e8e8;
   color: #1a1a1a;
 }
@@ -221,7 +230,8 @@ onMounted(() => {
 }
 
 .refresh-btn svg,
-.settings-btn svg {
+.settings-btn svg,
+.journal-btn svg {
   width: 20px;
   height: 20px;
 }
