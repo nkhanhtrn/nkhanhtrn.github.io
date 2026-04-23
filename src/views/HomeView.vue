@@ -10,27 +10,6 @@
           <h1>App Store</h1>
         </div>
         <div class="header-actions">
-          <a href="https://nkhanhtrn.github.io/chat/#/notebooks" class="shortcut-btn" target="_blank" rel="noopener" title="Notes">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <polyline points="14 2 14 8 20 8"/>
-              <line x1="16" y1="13" x2="8" y2="13"/>
-              <line x1="16" y1="17" x2="8" y2="17"/>
-              <polyline points="10 9 9 9 8 9"/>
-            </svg>
-          </a>
-          <a href="https://nkhanhtran.github.io/chat/#/books" class="shortcut-btn" target="_blank" rel="noopener" title="Reading">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-            </svg>
-          </a>
-          <a href="https://nkhanhtrn.github.io/trading-journal/" class="shortcut-btn" target="_blank" rel="noopener" title="Trading Journal">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-            </svg>
-          </a>
           <button class="refresh-btn" @click="refresh" :disabled="loading">
             <svg :class="{ spin: loading }" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M23 4v6h-6M1 20v-6h6"/>
@@ -48,6 +27,40 @@
     </header>
 
     <main class="main">
+      <!-- Shortcuts -->
+      <div class="shortcuts">
+        <a href="https://nkhanhtrn.github.io/chat/#/notebooks" class="shortcut" target="_blank" rel="noopener">
+          <div class="shortcut-icon notes-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+          </div>
+          <span class="shortcut-label">Notes</span>
+        </a>
+        <a href="https://nkhanhtrn.github.io/chat/#/books" class="shortcut" target="_blank" rel="noopener">
+          <div class="shortcut-icon books-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
+          </div>
+          <span class="shortcut-label">Reading</span>
+        </a>
+        <a href="https://nkhanhtrn.github.io/trading-journal/" class="shortcut" target="_blank" rel="noopener">
+          <div class="shortcut-icon journal-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+          </div>
+          <span class="shortcut-label">Trading Journal</span>
+        </a>
+      </div>
+
       <!-- Loading State -->
       <div v-if="loading && apps.length === 0" class="state-container">
         <div class="spinner"></div>
@@ -216,8 +229,7 @@ onMounted(() => {
 }
 
 .refresh-btn,
-.settings-btn,
-.shortcut-btn {
+.settings-btn {
   width: 40px;
   height: 40px;
   border: none;
@@ -233,8 +245,7 @@ onMounted(() => {
 }
 
 .refresh-btn:hover:not(:disabled),
-.settings-btn:hover,
-.shortcut-btn:hover {
+.settings-btn:hover {
   background: #e8e8e8;
   color: #1a1a1a;
 }
@@ -245,8 +256,7 @@ onMounted(() => {
 }
 
 .refresh-btn svg,
-.settings-btn svg,
-.shortcut-btn svg {
+.settings-btn svg {
   width: 20px;
   height: 20px;
 }
@@ -358,6 +368,76 @@ onMounted(() => {
 
 .learn-more:hover {
   text-decoration: underline;
+}
+
+.shortcuts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.shortcut {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+  padding: 0.5rem;
+  border-radius: 12px;
+  transition: transform 0.15s, background 0.15s;
+}
+
+.shortcut:hover {
+  background: #f5f5f5;
+  transform: scale(1.05);
+}
+
+.shortcut:active {
+  transform: scale(0.95);
+}
+
+.shortcut-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.shortcut-icon svg {
+  width: 30px;
+  height: 30px;
+}
+
+.notes-icon {
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+}
+
+.books-icon {
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+}
+
+.journal-icon {
+  background: linear-gradient(135deg, #4CAF50, #388E3C);
+}
+
+.shortcut-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #424242;
+  text-align: center;
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .apps-container {
